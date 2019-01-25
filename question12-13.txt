@@ -1,0 +1,62 @@
+Question 12:
+
+Steps: 
+    go to: https://rest.ensembl.org/
+    Search for variation
+    choose: GET variation/:species/:id 	Uses a variant identifier (e.g. rsID) to return the variation features including optional genotype, phenotype and population data
+    Make query: 'https://rest.ensembl.org/variation/mouse/rs4224828?' -H 'Content-type:xml'
+    Look in results for "mappings: location"
+    
+    curl 'https://rest.ensembl.org/variation/mouse/rs4224828?' -H 'Content-type:xml'
+    
+    (Chose xml to increase readability in the terminal)
+    
+        <html><title>EnsEMBL::REST</title><body><pre>--- 
+        MAF: ~
+        ambiguity: &#39;Y&#39;
+        ancestral_allele: ~
+        evidence: 
+          - Multiple_observations
+          - Frequency
+        mappings: 
+          - 
+            allele_string: T/C
+            assembly_name: GRCm38
+            coord_system: chromosome
+            end: 136443949
+            location: 4:136443949-136443949
+            seq_region_name: 4
+            start: 136443949
+            strand: 1
+        minor_allele: ~
+        most_severe_consequence: 3_prime_UTR_variant
+        name: rs4224828
+        source: Variants (including SNPs and indels) imported from dbSNP
+        synonyms: []
+
+        var_class: SNP
+        </pre></body></html>
+        
+    => answer: location: 4:136443949-136443949 (Chromosome 4, start: 136443949 end: 136443949)
+    
+Question 13:
+
+Steps:
+    go to: https://rest.ensembl.org/
+    search for cross references
+    choose: GET xrefs/symbol/:species/:symbol 	Looks up an external symbol and returns all Ensembl objects linked to it. This can be a display name for a gene/transcript/translation, a synonym or an externally linked reference. If a gene's transcript is linked to the supplied symbol the service will return both gene and transcript (it supports transient links).
+    I happen to know that the zebrafish's scientific name is danio rerio, so I can perform the query is following:
+    curl 'https://rest.ensembl.org/xrefs/symbol/danio_rerio/MYCN?' -H 'Content-type:application/json'
+    Grab this ENS id: ENSDARG00000006837
+    Go to Sequence: GET sequence/id/:id 	Request multiple types of sequence by stable identifier. Supports feature masking and expand options.
+    Make query with ENS id
+    curl 'https://rest.ensembl.org/sequence/id/ENSDARG00000006837?type=genomic' -H 'Content-type:text/x-fasta'
+    Header says: chromosome:GRCz11:20:33294428:33299384:1
+    Go to sequence: GET sequence/region/:species/:region 	Returns the genomic sequence of the specified region of the given species. Supports feature masking and expand options.
+    Make query: (regionstart till regionstart+99)
+    curl 'https://rest.ensembl.org/sequence/region/danio_rerio/20:33294428..33294527:1?' -H 'Content-type:text/x-fasta'
+    >chromosome:GRCz11:20:33294428:33294527:1
+    TAGAATAATACTTCACAGCCCGAAACACAGAGGCGCAGAACAGTCTTCAGTCGCCGCGGT
+    AGATGTGCGACTCCAAACGGGAGGCACAGTGACTGCGATA
+
+    
