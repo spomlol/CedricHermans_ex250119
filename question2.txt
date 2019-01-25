@@ -2,12 +2,18 @@ Unnormalized form: Just list all the possible columns
     DB(PersNo, Name, DateOfBirth, LabCode, LabName, ResearchCode, ResearchDescription, Research supervisor)
 
 First normalized form: Remove repeating elements, add primary keys to every table, no columns may represent the same data
+        => ResearchCode, ResearchDescription, Research supervisor are repeating
+        => PersNo is key in first table
+        => PersNo and ResearchCode are keys from second table
+
     DB(PersNo, Name, DateOfBirth, LabCode, LabName)
     Research(PersNo, ResearchCode, ResearchDescription, Research supervisor)
         keys(PersNo)
         keys(PersNo, ResearchCode)
         
 Second normalized form: Should be in 1NF and each element should be dependend on the whole key, not on the subkey
+        => ResearchDescription, Research supervisor are only dependend on ResearchCode, not PersNo
+    
     DB(PersNo, Name, DateOfBirth, LabCode, LabName)
     Research(PersNo, ResearchCode)
     ResearchDetail(ResearchCode, ResearchDescription, Research supervisor)
@@ -16,6 +22,8 @@ Second normalized form: Should be in 1NF and each element should be dependend on
         keys(ResearchCode)
         
 Third normalized form: should be in 2NF and each element should be non transitively dependend on the whole key (aka: a non-key should not depend on another non-key)
+        => LabName is dependend on Labcode, which is not a key    
+        
     DB(PersNo, Name, DateOfBirth, LabCode)
     Lab(LabCode, LabName)
     Research(PersNo, ResearchCode)
