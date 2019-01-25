@@ -1,0 +1,41 @@
+Question 4:
+
+    select gene_name,seq_region_end-seq_region_start+1 as length from gene order by length;
+
+        # gene_name, length
+        'TRDD1', '8'
+
+Question 5:
+
+    select gene.gene_name,count(*) as NoTranscripts from gene, transcript where gene.gene_id= transcript.gene_id group by gene.gene_id order by NoTranscripts DESC limit 1;
+
+        # gene_name, NoTranscripts
+        'NDRG2', '80'
+
+Question 6:
+
+1:
+    select gene.chromosome, count(*) as NoGenes from gene where gene.description like "%cancer%" group by gene.chromosome order by NoGenes DESC limit 1,1;
+    
+        # chromosome, NoGenes
+        '9', '5'
+2:
+    select count(distinct(exon.exon_id)) as NumberOfExones from transcript, exon_transcript,exon,gene where transcript.transcript_id= exon_transcript.transcript_id and exon_transcript.exon_id=exon.exon_id and transcript.gene_id=gene.gene_id and gene.chromosome=9;
+
+        # NumberOfExones
+        '24097'
+        
+Question 7:
+
+Query:
+
+    select count(*) from exon;
+    select count(*) from exon_transcript;
+
+Result:
+
+    642590
+    1178393
+
+Answer: 1 transcript can be a result of multiple exons, and an exon can be part of multiple transcripts. so it is a many-to-many relationship cross-reference table. 
+
